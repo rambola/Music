@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">rR Music</string>
+    <string name="alphabeticFragment">Alphabet</string>
+    <string name="foldersFragment">Folders</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Re-name</string>
+    <string name="update">Update</string>
+    <string name="nameEmtpy">File name should not be empty.</string>
+    <string name="failedRename">Failed to rename the file.</string>
+    <string name="failedDelete">Failed to delete the file.</string>
+    <string name="fileNotFound">File not found in MediaStore.</string>
+</resources>
