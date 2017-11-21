@@ -7,12 +7,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -33,13 +38,22 @@ import java.util.List;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.FadeInAnimator;
 
-public class AlphabeticalFragment extends Fragment {
+public class AlphabeticalFragment extends Fragment implements SearchView.OnQueryTextListener {
     private final String LOG_TAG = AlphabeticalFragment.class.getSimpleName();
     private List<MusicDataModel> mMusicDataModels = new ArrayList<>();
     private Context mContext;
     private MusicAdapter mMusicAdapter;
-
     private RecyclerView mRecyclerView;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.d(LOG_TAG, "isVisibleToUser: "+isVisibleToUser);
+
+        if(isVisibleToUser && null != mMusicAdapter) {
+            itemClickListener();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,21 +104,7 @@ public class AlphabeticalFragment extends Fragment {
                 }
             }));*/
 
-            mMusicAdapter.setOnItemClickListener(new MusicAdapter.MyClickListener() {
-                @Override
-                public void onItemClick(int position, View v) {
-                    Log.d(LOG_TAG, "onItemClick(), position: " + position);
-                    ((Dashboard) mContext).playMusic(mMusicDataModels, position);
-                }
-
-                @Override
-                public void onItemLongClick(int position, View v) {
-                    Log.d(LOG_TAG, "onItemLongClick(), position: " + position);
-                    showDeleteDialog(position, mMusicDataModels.get(position).getSongId(),
-                            mMusicDataModels.get(position).getSongDisplayName(),
-                            mMusicDataModels.get(position).getSongData());
-                }
-            });
+            itemClickListener();
         }
     }
 
@@ -113,6 +113,44 @@ public class AlphabeticalFragment extends Fragment {
         super.onAttach(context);
         Log.d(LOG_TAG, "onAttach " + context);
         mContext = context;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_top:
+                mRecyclerView.smoothScrollToPosition(0);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<MusicDataModel> filteredModelList = filter(mMusicDataModels, newText);
+
+        mMusicAdapter.setFilter(filteredModelList);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 
     private void showDeleteDialog(final int position, final String songId, final String songDisplayName,
@@ -246,6 +284,54 @@ public class AlphabeticalFragment extends Fragment {
         mMusicDataModels = new MyMusicDB(mContext).getSongsAlphabeticalOrder();
         Log.d(LOG_TAG, "updateList(), mMusicDataModels.size(): " + mMusicDataModels.size());
         mMusicAdapter.updateAdapter(mMusicDataModels, Utilities.ALPHABETS);
+    }
+
+    private List<MusicDataModel> filter(List<MusicDataModel> models, String query) {
+        query = query.toLowerCase();final List<MusicDataModel> filteredModelList = new ArrayList<>();
+        for (MusicDataModel model : models) {
+            final String text = model.getSongDisplayName().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
+    }
+
+    private void itemClickListener() {
+        mMusicAdapter.setOnItemClickListener(new MusicAdapter.MyClickListener() {
+            @Override
+            public void onItemClick(int position, String songDisplayName, View view) {
+                int itemPositionInFullList = indexInFullList(songDisplayName);
+                Log.d(LOG_TAG, "onItemClick(), position: " + position +
+                        ", songDisplayName: "+songDisplayName+", itemPositionInFullList: "+
+                        itemPositionInFullList);
+                if(-1 != itemPositionInFullList) {
+                    ((Dashboard) mContext).playMusic(mMusicDataModels, itemPositionInFullList);
+                }
+            }
+
+            @Override
+            public void onItemLongClick(int position, String songDisplayName, View v) {
+                int itemPositionInFullList = indexInFullList(songDisplayName);
+                Log.d(LOG_TAG, "onItemLongClick(), position: " + position +
+                        ", songDisplayName: "+songDisplayName+", itemPositionInFullList: "+
+                        itemPositionInFullList);
+                if(-1 != itemPositionInFullList) {
+                    showDeleteDialog(itemPositionInFullList, mMusicDataModels.get(
+                            itemPositionInFullList).getSongId(), mMusicDataModels.get(
+                            itemPositionInFullList).getSongDisplayName(),
+                            mMusicDataModels.get(itemPositionInFullList).getSongData());
+                }
+            }
+        });
+    }
+
+    private int indexInFullList (String songDisplayName) {
+        for(int i=0; i<mMusicDataModels.size(); i++) {
+            if (mMusicDataModels.get(i).getSongDisplayName().equalsIgnoreCase(songDisplayName))
+                return i;
+        }
+        return -1;
     }
 
 }

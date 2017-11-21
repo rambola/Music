@@ -51,9 +51,6 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
 
         initializeViews();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.alphabeticFragment)));
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.foldersFragment)));
@@ -121,6 +118,9 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
     }
 
     private void initializeViews() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         mCardView = (CardView) findViewById(R.id.bottomLayout);
         mAppCompatSeekBar = (AppCompatSeekBar) findViewById(R.id.songSeekBar);
         mSongNameTV = (TextView) findViewById(R.id.songNameTV);

@@ -110,13 +110,21 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.DataObjectHo
         }
 
         @Override
-        public void onClick(View v) {
-            myClickListener.onItemClick(getPosition(), v);
+        public void onClick(View view) {
+            if (mWhichFragment.equalsIgnoreCase(Utilities.ALPHABETS)) {
+                myClickListener.onItemClick(getAdapterPosition(),
+                        mDataSet.get(getAdapterPosition()).getSongDisplayName(), view);
+            } else {
+                myClickListener.onItemClick(getAdapterPosition(),
+                        mHashMapList.get(getAdapterPosition()).get(
+                                Utilities.HASH_MAP_KEY_FOLDER_NAME), view);
+            }
         }
 
         @Override
         public boolean onLongClick(View view) {
-            myClickListener.onItemLongClick(getPosition(), view);
+            myClickListener.onItemLongClick(getAdapterPosition(),
+                    mDataSet.get(getAdapterPosition()).getSongDisplayName(), view);
             return true;
         }
     }
@@ -126,8 +134,14 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.DataObjectHo
     }
 
     public interface MyClickListener {
-        void onItemClick(int position, View v);
-        void onItemLongClick(int position, View v);
+        void onItemClick(int position, String songDisplayName, View v);
+        void onItemLongClick(int position, String songDisplayName, View v);
+    }
+
+    public void setFilter(List<MusicDataModel> dataSet) {
+        mDataSet = new ArrayList<>();
+        mDataSet.addAll(dataSet);
+        notifyDataSetChanged();
     }
 
 }

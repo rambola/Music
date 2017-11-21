@@ -86,6 +86,7 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
 
             while (cursor.moveToNext()) {
                 if (musicCount == 100) {
+                    Log.d(LOG_TAG, "getAllMusicFiles(), musicCount: "+musicCount);
                     musicCount = 0;
                     publishProgress();
                 }

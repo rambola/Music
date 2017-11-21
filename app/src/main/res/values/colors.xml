@@ -8,4 +8,6 @@
     <color name="silver">#C0C0C0</color>
     <color name="progressStart">#663096</color>
     <color name="progressEnd">#50663096</color>
+    <color name="collapsingToolBarColor">#50FF4081</color>
+    <color name="progressEnd2">#20663096</color>
 </resources>

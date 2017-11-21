@@ -1,6 +1,7 @@
 package com.rr.music.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 
+import com.rr.music.MusicFolderListActivity;
 import com.rr.music.R;
 import com.rr.music.adapters.MusicAdapter;
 import com.rr.music.database.MyMusicDB;
@@ -26,7 +28,7 @@ import jp.wasabeef.recyclerview.animators.FadeInAnimator;
 
 public class FoldersFragment extends Fragment {
     private final String LOG_TAG = FoldersFragment.class.getSimpleName();
-    private ArrayList<HashMap<String, String>> hashMapList = new ArrayList<>();
+    private ArrayList<HashMap<String, String>> mHashMapList = new ArrayList<>();
     private Context mContext;
     private MusicAdapter mMusicAdapter;
 
@@ -34,6 +36,7 @@ public class FoldersFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         Log.d(LOG_TAG, "isVisibleToUser: "+isVisibleToUser);
+
         if (isVisibleToUser) {
             if(null != mMusicAdapter && mMusicAdapter.getItemCount() < 1)
                 updateRecyclerView();
@@ -69,13 +72,13 @@ public class FoldersFragment extends Fragment {
                         new ItemOffsetDecoration(mContext, R.dimen.item_offset);
                 mRecyclerView.addItemDecoration(itemOffsetDecoration);
 
-                if (null != hashMapList)
-                    hashMapList.clear();
+                if (null != mHashMapList)
+                    mHashMapList.clear();
 
-                hashMapList = new MyMusicDB(mContext).getFolderNamesWithMusicImage();
-                Log.d(LOG_TAG, "hashMapList.size(): " + hashMapList.size());
+                mHashMapList = new MyMusicDB(mContext).getFolderNamesWithMusicImage();
+                Log.d(LOG_TAG, "mHashMapList.size(): " + mHashMapList.size());
 
-                mMusicAdapter = new MusicAdapter(hashMapList, Utilities.FOLDERS);
+                mMusicAdapter = new MusicAdapter(mHashMapList, Utilities.FOLDERS);
 
                 mRecyclerView.setItemAnimator(new FadeInAnimator());
                 AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mMusicAdapter);
@@ -84,17 +87,7 @@ public class FoldersFragment extends Fragment {
                 alphaAdapter.setInterpolator(new OvershootInterpolator(2.5f));
                 mRecyclerView.setAdapter(alphaAdapter);
 
-                mMusicAdapter.setOnItemClickListener(new MusicAdapter.MyClickListener() {
-                    @Override
-                    public void onItemClick(int position, View v) {
-                        Log.d(LOG_TAG, "onItemClick(), position: " + position);
-                    }
-
-                    @Override
-                    public void onItemLongClick(int position, View v) {
-                        Log.d(LOG_TAG, "onItemLongClick(), position: " + position);
-                    }
-                });
+                itemClickListener();
             }
         }
     }
@@ -105,14 +98,35 @@ public class FoldersFragment extends Fragment {
         mContext = context;
     }
 
+    private void itemClickListener() {
+        mMusicAdapter.setOnItemClickListener(new MusicAdapter.MyClickListener() {
+            @Override
+            public void onItemClick(int position, String folderName, View view) {
+                Log.d(LOG_TAG, "onItemClick(), position: "+position+", folderName: "+folderName);
+                Intent intent = new Intent(mContext, MusicFolderListActivity.class);
+                intent.putExtra(Utilities.INTENT_KEY_FOLDER_NAME, folderName);
+                intent.putExtra(Utilities.INTENT_KEY_ALBUM_ART_PATH, mHashMapList.get(position).
+                        get(Utilities.HASH_MAP_KEY_SONG_ALBUM_ART_PATH));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(int position, String songDisplayName, View view) {
+                Log.d(LOG_TAG, "onItemLongClick(), position: " + position);
+            }
+        });
+    }
+
     private void updateRecyclerView () {
-        if (null != hashMapList)
-            hashMapList.clear();
+        if (null != mHashMapList)
+            mHashMapList.clear();
 
-        hashMapList = new MyMusicDB(mContext).getFolderNamesWithMusicImage();
-        Log.d(LOG_TAG, "hashMapList.size(): " + hashMapList.size());
+        mHashMapList = new MyMusicDB(mContext).getFolderNamesWithMusicImage();
+        Log.d(LOG_TAG, "hashMapList.size(): " + mHashMapList.size());
 
-        mMusicAdapter.updateAdapter(hashMapList, Utilities.FOLDERS);
+        mMusicAdapter.updateAdapter(mHashMapList, Utilities.FOLDERS);
+
+        itemClickListener();
     }
 
 }

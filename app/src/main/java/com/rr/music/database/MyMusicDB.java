@@ -16,7 +16,7 @@ import java.util.List;
 public class MyMusicDB extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "MyMusicDB";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private final String TABLE_NAME = "MyMusicTable";
     private final String SONG_ID = "SongId";
@@ -39,7 +39,7 @@ public class MyMusicDB extends SQLiteOpenHelper {
         final String COLUMN_ID = "_id";
 
         final String CREATE_TABLE = "CREATE TABLE "+TABLE_NAME+"("+COLUMN_ID+
-                " INTEGER PRIMARY KEY AUTOINCREMENT, "+SONG_ID+" TEXT, "+SONG_ALBUM_ID+" TEXT, "+
+                " INTEGER PRIMARY KEY AUTOINCREMENT, "+SONG_ID+" TEXT NOT NULL UNIQUE, "+SONG_ALBUM_ID+" TEXT, "+
                 SONG_ALBUM+" TEXT, "+SONG_ALBUM_ART_PATH+" TEXT, "+SONG_ARTIST+" TEXT, "+
                 SONG_DISPLAY_NAME+" TEXT, "+ SONG_TITLE+" TEXT, "+ SONG_DURATION+" TEXT, "+
                 SONG_DATA+" TEXT, "+ SONG_FOLDER_NAME+" TEXT);";
@@ -84,6 +84,35 @@ public class MyMusicDB extends SQLiteOpenHelper {
         String orderBy = SONG_DISPLAY_NAME + " ASC";
 
         Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, null, null, null, null, orderBy);
+
+        if(null != cursor && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (cursor.moveToNext()) {
+                list.add(new MusicDataModel(cursor.getString(
+                        cursor.getColumnIndex(SONG_ID)), "", "", "", cursor.getString(
+                        cursor.getColumnIndex(SONG_DATA)), cursor.getString(
+                        cursor.getColumnIndex(SONG_DISPLAY_NAME)), "", Long.parseLong(cursor.getString(
+                        cursor.getColumnIndex(SONG_DURATION)))));
+            }
+        }
+
+        if(null != cursor)
+            cursor.close();
+        sqLiteDatabase.close();
+
+        return list;
+    }
+
+    public List<MusicDataModel> getSongsAlphabeticalOrderForFolder (String folderName) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        List<MusicDataModel> list = new ArrayList<>();
+
+        String[] columns = {SONG_ID, SONG_DISPLAY_NAME, SONG_DURATION, SONG_DATA};
+        String orderBy = SONG_DISPLAY_NAME + " ASC";
+        String selection = SONG_FOLDER_NAME + "=?";
+        String selectionArgs[] = {folderName};
+
+        Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, selection, selectionArgs, null, null, orderBy);
 
         if(null != cursor && cursor.getCount() > 0) {
             cursor.moveToFirst();

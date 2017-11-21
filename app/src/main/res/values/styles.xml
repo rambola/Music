@@ -12,4 +12,15 @@
         <item name="colorAccent">@color/colorPrimary</item> <!-- Whatever color you want-->
     </style>
 
+    <style name="expandedAppbar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="collapsedAppbar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

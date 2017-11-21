@@ -9,4 +9,6 @@
     <string name="failedRename">Failed to rename the file.</string>
     <string name="failedDelete">Failed to delete the file.</string>
     <string name="fileNotFound">File not found in MediaStore.</string>
+    <string name="menuSearch">Search</string>
+    <string name="menuTop">Top</string>
 </resources>
