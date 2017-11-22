@@ -11,4 +11,5 @@
     <string name="fileNotFound">File not found in MediaStore.</string>
     <string name="menuSearch">Search</string>
     <string name="menuTop">Top</string>
+    <string name="allSetNow">All set now</string>
 </resources>

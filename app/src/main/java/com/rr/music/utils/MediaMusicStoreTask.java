@@ -7,7 +7,9 @@ import android.provider.MediaStore;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.rr.music.R;
 import com.rr.music.adapters.FragmentsViewPagerAdapter;
 import com.rr.music.database.MyMusicDB;
 
@@ -128,6 +130,12 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
 
         mContentLoadingProgressBar.setVisibility(View.GONE);
         mFragmentsViewPagerAdapter.updateAlphabeticalFragment();
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        Toast.makeText(mContext, mContext.getString(R.string.allSetNow), Toast.LENGTH_LONG).show();
     }
 
 }

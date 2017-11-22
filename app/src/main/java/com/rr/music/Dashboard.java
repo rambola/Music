@@ -36,6 +36,7 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
     ContentLoadingProgressBar mContentLoadingProgressBar;
     FragmentsViewPagerAdapter mFragmentsAdapter;
     TabLayout mTabLayout;
+    public static Dashboard mDashboard;
 
     private Handler mHandler = new Handler();
     MediaMusicStoreTask mMediaMusicStoreTask;
@@ -49,6 +50,7 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        mDashboard = Dashboard.this;
         initializeViews();
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -102,19 +104,27 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mDashboard = null;
+
         if(null != mViewPager)
             mViewPager.clearOnPageChangeListeners();
 
         if(null != mTabLayout)
             mTabLayout.clearOnTabSelectedListeners();
 
-        if(null != mHandler && null != mUpdateTimeTask)
-            mHandler.removeCallbacks(mUpdateTimeTask);
-
         if(null != mMediaMusicStoreTask && (AsyncTask.Status.PENDING ==
                 mMediaMusicStoreTask.getStatus() || AsyncTask.Status.RUNNING ==
                 mMediaMusicStoreTask.getStatus()))
             mMediaMusicStoreTask.cancel(true);
+
+        if(null != mHandler && null != mUpdateTimeTask)
+            mHandler.removeCallbacks(mUpdateTimeTask);
+
+        if(null != mMediaPlayer) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
     }
 
     private void initializeViews() {
@@ -168,6 +178,13 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
                 e.printStackTrace();
                 mPlayPauseIV.setImageResource(R.mipmap.play);
             }
+        }
+    }
+
+    public void stopPlaying() {
+        if(null != mMediaPlayer) {
+            mMediaPlayer.pause();
+            mPlayPauseIV.setImageResource(R.mipmap.play);
         }
     }
 

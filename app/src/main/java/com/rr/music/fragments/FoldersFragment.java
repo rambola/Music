@@ -15,7 +15,7 @@ import android.view.animation.OvershootInterpolator;
 
 import com.rr.music.MusicFolderListActivity;
 import com.rr.music.R;
-import com.rr.music.adapters.MusicAdapter;
+import com.rr.music.adapters.FolderMusicAdapter;
 import com.rr.music.database.MyMusicDB;
 import com.rr.music.utils.ItemOffsetDecoration;
 import com.rr.music.utils.Utilities;
@@ -30,7 +30,7 @@ public class FoldersFragment extends Fragment {
     private final String LOG_TAG = FoldersFragment.class.getSimpleName();
     private ArrayList<HashMap<String, String>> mHashMapList = new ArrayList<>();
     private Context mContext;
-    private MusicAdapter mMusicAdapter;
+    private FolderMusicAdapter mFolderMusicAdapter;
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -38,7 +38,7 @@ public class FoldersFragment extends Fragment {
         Log.d(LOG_TAG, "isVisibleToUser: "+isVisibleToUser);
 
         if (isVisibleToUser) {
-            if(null != mMusicAdapter && mMusicAdapter.getItemCount() < 1)
+            if(null != mFolderMusicAdapter && mFolderMusicAdapter.getItemCount() < 1)
                 updateRecyclerView();
         }
     }
@@ -78,10 +78,10 @@ public class FoldersFragment extends Fragment {
                 mHashMapList = new MyMusicDB(mContext).getFolderNamesWithMusicImage();
                 Log.d(LOG_TAG, "mHashMapList.size(): " + mHashMapList.size());
 
-                mMusicAdapter = new MusicAdapter(mHashMapList, Utilities.FOLDERS);
+                mFolderMusicAdapter = new FolderMusicAdapter(mHashMapList);
 
                 mRecyclerView.setItemAnimator(new FadeInAnimator());
-                AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mMusicAdapter);
+                AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mFolderMusicAdapter);
                 alphaAdapter.setFirstOnly(true);
                 alphaAdapter.setDuration(1500);
                 alphaAdapter.setInterpolator(new OvershootInterpolator(2.5f));
@@ -99,7 +99,7 @@ public class FoldersFragment extends Fragment {
     }
 
     private void itemClickListener() {
-        mMusicAdapter.setOnItemClickListener(new MusicAdapter.MyClickListener() {
+        mFolderMusicAdapter.setOnItemClickListener(new FolderMusicAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, String folderName, View view) {
                 Log.d(LOG_TAG, "onItemClick(), position: "+position+", folderName: "+folderName);
@@ -108,11 +108,6 @@ public class FoldersFragment extends Fragment {
                 intent.putExtra(Utilities.INTENT_KEY_ALBUM_ART_PATH, mHashMapList.get(position).
                         get(Utilities.HASH_MAP_KEY_SONG_ALBUM_ART_PATH));
                 startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(int position, String songDisplayName, View view) {
-                Log.d(LOG_TAG, "onItemLongClick(), position: " + position);
             }
         });
     }
@@ -124,7 +119,7 @@ public class FoldersFragment extends Fragment {
         mHashMapList = new MyMusicDB(mContext).getFolderNamesWithMusicImage();
         Log.d(LOG_TAG, "hashMapList.size(): " + mHashMapList.size());
 
-        mMusicAdapter.updateAdapter(mHashMapList, Utilities.FOLDERS);
+        mFolderMusicAdapter.updateAdapter(mHashMapList);
 
         itemClickListener();
     }

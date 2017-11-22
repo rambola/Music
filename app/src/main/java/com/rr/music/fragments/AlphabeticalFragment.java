@@ -27,10 +27,9 @@ import android.widget.Toast;
 
 import com.rr.music.Dashboard;
 import com.rr.music.R;
-import com.rr.music.adapters.MusicAdapter;
+import com.rr.music.adapters.AlphabeticMusicAdapter;
 import com.rr.music.database.MyMusicDB;
 import com.rr.music.utils.MusicDataModel;
-import com.rr.music.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class AlphabeticalFragment extends Fragment implements SearchView.OnQuery
     private final String LOG_TAG = AlphabeticalFragment.class.getSimpleName();
     private List<MusicDataModel> mMusicDataModels = new ArrayList<>();
     private Context mContext;
-    private MusicAdapter mMusicAdapter;
+    private AlphabeticMusicAdapter mAlphabeticMusicAdapter;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -50,7 +49,7 @@ public class AlphabeticalFragment extends Fragment implements SearchView.OnQuery
         super.setUserVisibleHint(isVisibleToUser);
         Log.d(LOG_TAG, "isVisibleToUser: "+isVisibleToUser);
 
-        if(isVisibleToUser && null != mMusicAdapter) {
+        if(isVisibleToUser && null != mAlphabeticMusicAdapter) {
             itemClickListener();
         }
     }
@@ -81,10 +80,10 @@ public class AlphabeticalFragment extends Fragment implements SearchView.OnQuery
             mMusicDataModels = new MyMusicDB(mContext).getSongsAlphabeticalOrder();
             Log.d(LOG_TAG, "mMusicDataModels.size(): " + mMusicDataModels.size());
 
-            mMusicAdapter = new MusicAdapter(mMusicDataModels, Utilities.ALPHABETS);
+            mAlphabeticMusicAdapter = new AlphabeticMusicAdapter(mMusicDataModels);
 
             mRecyclerView.setItemAnimator(new FadeInAnimator());
-            AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mMusicAdapter);
+            AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mAlphabeticMusicAdapter);
             alphaAdapter.setFirstOnly(true);
             alphaAdapter.setDuration(1500);
             alphaAdapter.setInterpolator(new OvershootInterpolator(2.5f));
@@ -144,7 +143,7 @@ public class AlphabeticalFragment extends Fragment implements SearchView.OnQuery
     public boolean onQueryTextChange(String newText) {
         final List<MusicDataModel> filteredModelList = filter(mMusicDataModels, newText);
 
-        mMusicAdapter.setFilter(filteredModelList);
+        mAlphabeticMusicAdapter.setFilter(filteredModelList);
         return true;
     }
 
@@ -186,7 +185,7 @@ public class AlphabeticalFragment extends Fragment implements SearchView.OnQuery
                                 "isFileDeleted: " + isFileDeleted);
                         if (isFileDeleted) {
                             mMusicDataModels.remove(position);
-                            mMusicAdapter.notifyDataSetChanged();
+                            mAlphabeticMusicAdapter.notifyDataSetChanged();
                             dialog.dismiss();
                         } else {
                             Toast.makeText(mContext, mContext.getString(R.string.failedDelete),
@@ -230,7 +229,7 @@ public class AlphabeticalFragment extends Fragment implements SearchView.OnQuery
                             if (renamed) {
                                 MusicDataModel musicDataModel = mMusicDataModels.get(position);
                                 musicDataModel.setSongDisplayName(newName);
-                                mMusicAdapter.notifyDataSetChanged();
+                                mAlphabeticMusicAdapter.notifyDataSetChanged();
 
                                 dialog.dismiss();
                             } else {
@@ -283,7 +282,8 @@ public class AlphabeticalFragment extends Fragment implements SearchView.OnQuery
     public void updateList() {
         mMusicDataModels = new MyMusicDB(mContext).getSongsAlphabeticalOrder();
         Log.d(LOG_TAG, "updateList(), mMusicDataModels.size(): " + mMusicDataModels.size());
-        mMusicAdapter.updateAdapter(mMusicDataModels, Utilities.ALPHABETS);
+        mAlphabeticMusicAdapter.updateAdapter(mMusicDataModels);
+        itemClickListener();
     }
 
     private List<MusicDataModel> filter(List<MusicDataModel> models, String query) {
@@ -294,11 +294,12 @@ public class AlphabeticalFragment extends Fragment implements SearchView.OnQuery
                 filteredModelList.add(model);
             }
         }
+
         return filteredModelList;
     }
 
     private void itemClickListener() {
-        mMusicAdapter.setOnItemClickListener(new MusicAdapter.MyClickListener() {
+        mAlphabeticMusicAdapter.setOnItemClickListener(new AlphabeticMusicAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, String songDisplayName, View view) {
                 int itemPositionInFullList = indexInFullList(songDisplayName);
