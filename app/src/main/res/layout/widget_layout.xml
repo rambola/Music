@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_margin="8dip"
+    android:padding="7dip"
+    android:gravity="center"
+    android:background="@drawable/widget_shape" >
+
+    <!--<TextView
+        android:id="@+id/update"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_margin="4dip"
+        android:text="Static Text" >
+    </TextView>-->
+
+    <ImageView
+        android:id="@+id/musicCoverImg"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:contentDescription="@string/app_name"
+        android:src="@mipmap/ic_launcher_round"/>
+
+    <TextView
+        android:id="@+id/songNameTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="2dp"
+        android:maxLines="1"
+        android:ellipsize="marquee"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:layout_toEndOf="@+id/musicCoverImg"/>
+
+    <TextView
+        android:id="@+id/songDetailsTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="7dp"
+        android:maxLines="2"
+        android:textSize="18sp"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:ellipsize="marquee"
+        android:layout_below="@+id/songNameTV"
+        android:layout_toEndOf="@+id/musicCoverImg"/>
+
+    <!--<View
+        android:id="@+id/separationView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white"
+        android:layout_below="@+id/musicCoverImg"
+        android:layout_marginTop="4dp"/>-->
+
+    <ProgressBar
+        android:id="@+id/songProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:layout_below="@+id/musicCoverImg"
+        android:progress="22"
+        style="?android:attr/progressBarStyleHorizontal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="7dp"
+        android:layout_below="@+id/songProgressBar">
+
+        <ImageView
+            android:id="@+id/shuffleIV"
+            android:layout_width="0dp"
+            android:layout_height="31dip"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_launcher_round"/>
+
+        <ImageView
+            android:id="@+id/prevSongIV"
+            android:layout_width="0dp"
+            android:layout_height="31dip"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_launcher_round"/>
+
+        <ImageView
+            android:id="@+id/playPauseSongIV"
+            android:layout_width="0dp"
+            android:layout_height="31dip"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_launcher_round"/>
+
+        <ImageView
+            android:id="@+id/nextSongIV"
+            android:layout_width="0dp"
+            android:layout_height="31dip"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_launcher_round"/>
+
+        <ImageView
+            android:id="@+id/repeatSongIV"
+            android:layout_width="0dp"
+            android:layout_height="31dip"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_launcher_round"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -133,10 +133,16 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
         if(null != mViewPager) {
             if(1 == mViewPager.getCurrentItem())
                 mViewPager.setCurrentItem(0);
-            else
+            else {
                 super.onBackPressed();
-        } else
+
+                updateTheWidget();
+            }
+        } else {
             super.onBackPressed();
+
+            updateTheWidget();
+        }
     }
 
     private void initializeViews() {
@@ -305,6 +311,17 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
 
         // return current duration in milliseconds
         return currentDuration * 1000;
+    }
+
+    private void updateTheWidget () {
+        /*First check the app is opened from widget or not.
+        If opened from widget then only update the widget*/
+
+//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+//        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_2x1);
+//        ComponentName thisWidget = new ComponentName(context, MyWidget.class);
+//        remoteViews.setTextViewText(R.id.my_text_view, "myText" + System.currentTimeMillis());
+//        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
     }
 
 }
