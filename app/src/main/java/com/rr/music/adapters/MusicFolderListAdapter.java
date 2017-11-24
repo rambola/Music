@@ -24,6 +24,11 @@ public class MusicFolderListAdapter extends RecyclerView.Adapter<
         mDataSet = myDataSet;
     }
 
+    public void updateAdapter(List<MusicDataModel> myDataSet) {
+        mDataSet = myDataSet;
+        notifyDataSetChanged();
+    }
+
     @Override
     public DataObjectHolder onCreateViewHolder(ViewGroup parent,
                                                int viewType) {
@@ -85,6 +90,11 @@ public class MusicFolderListAdapter extends RecyclerView.Adapter<
     public interface MyClickListener {
         void onItemClick(int position, View v);
         void onItemLongClick(int position, View v);
+    }
+
+    public void newRowIndex (int newRowIndex) {
+        rowIndex = newRowIndex;
+        notifyDataSetChanged();
     }
 
 }

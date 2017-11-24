@@ -114,8 +114,9 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
 
         if(null != mMediaMusicStoreTask && (AsyncTask.Status.PENDING ==
                 mMediaMusicStoreTask.getStatus() || AsyncTask.Status.RUNNING ==
-                mMediaMusicStoreTask.getStatus()))
+                mMediaMusicStoreTask.getStatus())) {
             mMediaMusicStoreTask.cancel(true);
+        }
 
         if(null != mHandler && null != mUpdateTimeTask)
             mHandler.removeCallbacks(mUpdateTimeTask);
@@ -125,6 +126,17 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(null != mViewPager) {
+            if(1 == mViewPager.getCurrentItem())
+                mViewPager.setCurrentItem(0);
+            else
+                super.onBackPressed();
+        } else
+            super.onBackPressed();
     }
 
     private void initializeViews() {
@@ -179,6 +191,10 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
                 mPlayPauseIV.setImageResource(R.mipmap.play);
             }
         }
+    }
+
+    public boolean isMusicPlaying() {
+        return null != mMediaPlayer && mMediaPlayer.isPlaying();
     }
 
     public void stopPlaying() {

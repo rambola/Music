@@ -13,7 +13,7 @@
     </style>
 
     <style name="expandedAppbar" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textSize">48sp</item>
+        <item name="android:textSize">40sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
     </style>

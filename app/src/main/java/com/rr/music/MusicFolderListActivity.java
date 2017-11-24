@@ -1,12 +1,17 @@
 package com.rr.music;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,7 +71,7 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
             @Override
             public void onItemClick(int position, View view) {
                 Log.d(LOG_TAG, "onItemClick(), position: "+position);
-                stopOtherMusic();
+//                stopOtherMusic();
                 playMusic(mMusicDataModels, position);
             }
 
@@ -101,6 +106,15 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MusicFolderListActivity.class.getName());
+        LocalBroadcastManager.getInstance(MusicFolderListActivity.this).registerReceiver(
+                broadcastReceiver, intentFilter);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(null != mMediaPlayer) {
@@ -109,17 +123,39 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
             mMediaPlayer = null;
         }
 
-        mRecyclerView.clearOnScrollListeners();
-        mMusicFolderListAdapter.setOnItemClickListener(null);
+        if(null != mRecyclerView)
+            mRecyclerView.clearOnScrollListeners();
+
+        if(null != mMusicFolderListAdapter)
+            mMusicFolderListAdapter.setOnItemClickListener(null);
+
+        if(null != broadcastReceiver)
+            LocalBroadcastManager.getInstance(MusicFolderListActivity.this).unregisterReceiver(
+                    broadcastReceiver);
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+        mFloatingActionButton.setImageResource(android.R.drawable.ic_media_play);
         if(mClickedPosition < mMusicDataModels.size())
             playMusic(mMusicDataModels, mClickedPosition + 1);
         else
             playMusic(mMusicDataModels, 0);
     }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_TAG, "onReceive(), intent.getAction(): "+intent.getAction());
+            if(null != mMusicDataModels)
+                mMusicDataModels.clear();
+
+            mMusicDataModels = new MyMusicDB(MusicFolderListActivity.this).
+                    getSongsAlphabeticalOrderForFolder(mFolderName);
+
+            mMusicFolderListAdapter.updateAdapter(mMusicDataModels);
+        }
+    };
 
     private void initViews() {
         mFolderName = getIntent().getStringExtra(Utilities.INTENT_KEY_FOLDER_NAME);
@@ -145,7 +181,8 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
     }
 
     private void playMusic (List<MusicDataModel> musicDataModels, int position) {
-        Dashboard.mDashboard.stopPlaying();
+        if(Dashboard.mDashboard.isMusicPlaying())
+            Dashboard.mDashboard.stopPlaying();
 
         if(null != mMediaPlayer) {
             mClickedPosition = position;
@@ -162,6 +199,8 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
                 mMediaPlayer.setDataSource(musicDataModel.getSongData());
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
+
+                mMusicFolderListAdapter.newRowIndex(position);
             } catch (IOException e) {
                 e.printStackTrace();
                 mFloatingActionButton.setImageResource(android.R.drawable.ic_media_play);
@@ -296,7 +335,7 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
         return renamed;
     }
 
-    private void stopOtherMusic () {
+//    private void stopOtherMusic () {
 //        AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 //
 //// Request audio focus for playback
@@ -310,7 +349,7 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
 //        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 //// other app had stopped playing song now , so u can do u stuff now .
 //        }
-    }
+//    }
 
     /*private AudioManager.OnAudioFocusChangeListener focusChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {

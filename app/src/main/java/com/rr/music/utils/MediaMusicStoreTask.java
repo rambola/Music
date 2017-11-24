@@ -1,17 +1,21 @@
 package com.rr.music.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.rr.music.MusicFolderListActivity;
 import com.rr.music.R;
 import com.rr.music.adapters.FragmentsViewPagerAdapter;
 import com.rr.music.database.MyMusicDB;
+import com.rr.music.fragments.FoldersFragment;
 
 public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
     private final String LOG_TAG = MediaMusicStoreTask.class.getSimpleName();
@@ -130,6 +134,12 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
 
         mContentLoadingProgressBar.setVisibility(View.GONE);
         mFragmentsViewPagerAdapter.updateAlphabeticalFragment();
+
+        Toast.makeText(mContext, mContext.getString(R.string.updatingList), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(FoldersFragment.class.getName());
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        intent = new Intent(MusicFolderListActivity.class.getName());
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     @Override

@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.rr.music.R;
@@ -14,9 +14,11 @@ import com.rr.music.utils.MusicDataModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlphabeticMusicAdapter extends RecyclerView.Adapter<AlphabeticMusicAdapter.DataObjectHolder> {
+public class AlphabeticMusicAdapter extends RecyclerView.Adapter<AlphabeticMusicAdapter.DataObjectHolder>
+        implements SectionIndexer {
     private static String LOG_TAG = AlphabeticMusicAdapter.class.getSimpleName();
     private List<MusicDataModel> mDataSet;
+    private ArrayList<Integer> mSectionPositions;
     private static MyClickListener myClickListener;
 
     public AlphabeticMusicAdapter(List<MusicDataModel> myDataSet) {
@@ -48,12 +50,39 @@ public class AlphabeticMusicAdapter extends RecyclerView.Adapter<AlphabeticMusic
         return mDataSet.size();
     }
 
+    @Override
+    public Object[] getSections() {
+        List<String> sections = new ArrayList<>(26);
+        mSectionPositions = new ArrayList<>(26);
+        for (int i = 0, size = mDataSet.size(); i < size; i++) {
+            char section = mDataSet.get(i).getSongDisplayName().trim().charAt(0);
+            if (!sections.contains(String.valueOf(section))) {
+                if (Character.isDigit(section)) {
+                    sections.add(String.valueOf(section));
+                } else {
+                    sections.add(String.valueOf(section).toUpperCase());
+                }
+
+                mSectionPositions.add(i);
+            }
+        }
+        return sections.toArray(new String[0]);
+    }
+
+    @Override
+    public int getPositionForSection(int i) {
+        return mSectionPositions.get(i);
+    }
+
+    @Override
+    public int getSectionForPosition(int i) {
+        return 0;
+    }
+
     class DataObjectHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
         TextView musicAdapterTV;
         CardView cardView;
-        TextView folderNameTV;
-        ImageView musicImageIV;
 
         DataObjectHolder(View itemView) {
             super(itemView);

@@ -1,10 +1,13 @@
 package com.rr.music.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -97,6 +100,32 @@ public class FoldersFragment extends Fragment {
         super.onAttach(context);
         mContext = context;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(FoldersFragment.class.getName());
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(
+                broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onDetach() {
+        if(null != broadcastReceiver)
+            LocalBroadcastManager.getInstance(mContext).unregisterReceiver(
+                    broadcastReceiver);
+        super.onDetach();
+    }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_TAG, "onReceive(), intent.getAction(): "+intent.getAction());
+            updateRecyclerView();
+        }
+    };
 
     private void itemClickListener() {
         mFolderMusicAdapter.setOnItemClickListener(new FolderMusicAdapter.MyClickListener() {

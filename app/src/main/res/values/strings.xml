@@ -12,4 +12,5 @@
     <string name="menuSearch">Search</string>
     <string name="menuTop">Top</string>
     <string name="allSetNow">All set now</string>
+    <string name="updatingList">Updating list</string>
 </resources>
