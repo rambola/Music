@@ -94,7 +94,8 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
                         mFloatingActionButton.setImageResource(android.R.drawable.ic_media_play);
                     } else {
                         if (-1 == mClickedPosition) {
-                            playMusic(mMusicDataModels, 0);
+                            if(null != mMusicDataModels && mMusicDataModels.size() > 0)
+                                playMusic(mMusicDataModels, 0);
                         } else {
                             mMediaPlayer.start();
                             mFloatingActionButton.setImageResource(android.R.drawable.ic_media_pause);

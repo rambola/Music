@@ -1,8 +1,10 @@
 package com.rr.music.utils;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
@@ -38,12 +40,13 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
             return onlyPath.substring(onlyPath.lastIndexOf("/") + 1, onlyPath.length()).trim();
         }
         else {
+            Log.d(LOG_TAG, "getFolderName(), OnlyMusicFiles, songPath: "+songPath);
             return "OnlyMusicFiles";
         }
     }
 
     private String getAlbumArtPath(String albumId) {
-        Cursor cursor = mContext.getContentResolver().query(
+       /* Cursor cursor = mContext.getContentResolver().query(
                 MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
                 MediaStore.Audio.Albums._ID + "=?", new String[]{albumId}, null);
@@ -56,7 +59,12 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        return path;
+        return path;*/
+
+        Uri sArtworkUri = Uri.parse(Utilities.ALBUM_ART_CONTENT_URI);
+        Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, Long.parseLong(albumId));
+
+        return albumArtUri.toString();
     }
 
     @Override
@@ -102,6 +110,8 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
                 String albumArtPath = getAlbumArtPath(cursor.getString(
                         cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
 
+//                Log.d(LOG_TAG, "getAllMusicFiles(), albumArtPath: "+albumArtPath);
+
                 new MyMusicDB(mContext).insertSongDetails(cursor.getString(
                         cursor.getColumnIndex(MediaStore.Audio.Media._ID)), cursor.getString(
                         cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)), cursor.getString(
@@ -135,7 +145,7 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
         mContentLoadingProgressBar.setVisibility(View.GONE);
         mFragmentsViewPagerAdapter.updateAlphabeticalFragment();
 
-        Toast.makeText(mContext, mContext.getString(R.string.updatingList), Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, mContext.getString(R.string.updatingList), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(FoldersFragment.class.getName());
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         intent = new Intent(MusicFolderListActivity.class.getName());

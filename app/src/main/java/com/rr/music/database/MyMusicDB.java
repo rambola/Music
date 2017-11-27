@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.rr.music.utils.MusicDataModel;
 import com.rr.music.utils.Utilities;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class MyMusicDB extends SQLiteOpenHelper {
 
+    private final String LOG_TAG = MyMusicDB.class.getName();
     private static final String DATABASE_NAME = "MyMusicDB";
     private static final int DATABASE_VERSION = 3;
 
@@ -86,7 +88,6 @@ public class MyMusicDB extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, null, null, null, null, orderBy);
 
         if(null != cursor && cursor.getCount() > 0) {
-            cursor.moveToFirst();
             while (cursor.moveToNext()) {
                 list.add(new MusicDataModel(cursor.getString(
                         cursor.getColumnIndex(SONG_ID)), "", "", "", cursor.getString(
@@ -114,8 +115,8 @@ public class MyMusicDB extends SQLiteOpenHelper {
 
         Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, selection, selectionArgs, null, null, orderBy);
 
+        Log.d(LOG_TAG, "getSongsAlphabeticalOrderForFolder, cursor size: "+(null != cursor ? cursor.getCount() : -1));
         if(null != cursor && cursor.getCount() > 0) {
-            cursor.moveToFirst();
             while (cursor.moveToNext()) {
                 list.add(new MusicDataModel(cursor.getString(
                         cursor.getColumnIndex(SONG_ID)), "", "", "", cursor.getString(
@@ -127,6 +128,7 @@ public class MyMusicDB extends SQLiteOpenHelper {
 
         if(null != cursor)
             cursor.close();
+
         sqLiteDatabase.close();
 
         return list;
@@ -142,7 +144,6 @@ public class MyMusicDB extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, null, null, null, null, orderBy);
 
         if(null != cursor && cursor.getCount() > 0) {
-            cursor.moveToFirst();
             while (cursor.moveToNext()) {
                 String songId = cursor.getString(cursor.getColumnIndex(SONG_ID)).trim();
                 String folderName = cursor.getString(cursor.getColumnIndex(SONG_FOLDER_NAME)).trim();

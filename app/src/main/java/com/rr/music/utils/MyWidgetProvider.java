@@ -35,10 +35,11 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
         Log.d(LOG_TAG, "..........onUpdate()...........");
 
-        // Get all ids
         ComponentName thisWidget = new ComponentName(context,
                 MyWidgetProvider.class);
+        // Get all ids
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+
         for (int widgetId : allWidgetIds) {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.widget_layout);
@@ -46,6 +47,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
 //            remoteViews.setTextViewText(R.id.update, String.valueOf(number));
             Intent intent = new Intent(context, Dashboard.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Utilities.IS_OPENED_FROM_WIDGET, true);
             PendingIntent pending = PendingIntent.getActivity(context, 0,intent, 0);
             remoteViews.setOnClickPendingIntent(R.id.musicCoverImg, pending);
             // Register an onClickListener

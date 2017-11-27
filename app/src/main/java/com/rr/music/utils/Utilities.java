@@ -9,4 +9,6 @@ public class Utilities {
     public static final int GRID_COLUMNS = 3;
     public static final String INTENT_KEY_FOLDER_NAME = "FolderName";
     public static final String INTENT_KEY_ALBUM_ART_PATH = "AlbumArtPath";
+    public static final String IS_OPENED_FROM_WIDGET = "OpenedFromWidget";
+    public static final String ALBUM_ART_CONTENT_URI = "content://media/external/audio/albumart";
 }
