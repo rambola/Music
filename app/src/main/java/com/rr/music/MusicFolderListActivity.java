@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -22,9 +23,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.rr.music.adapters.MusicFolderListAdapter;
 import com.rr.music.database.MyMusicDB;
 import com.rr.music.utils.MusicDataModel;
@@ -47,6 +51,7 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
     private MusicFolderListAdapter mMusicFolderListAdapter;
 
     private MediaPlayer mMediaPlayer;
+    private ImageView imageView;
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFloatingActionButton;
 
@@ -56,6 +61,11 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
         setContentView(R.layout.activity_music_folder_list);
 
         initViews();
+
+        Glide.with(MusicFolderListActivity.this).load(Uri.parse(mAlbumArtPath))/*.centerCrop()*/.
+                diskCacheStrategy(DiskCacheStrategy.ALL)./*placeholder(R.mipmap.app_icon).
+                transform(new GlideCircleTransform(MusicFolderListActivity.this)).*/
+                into(imageView);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(MusicFolderListActivity.this));
         mRecyclerView.setHasFixedSize(true);
@@ -169,6 +179,7 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
                 (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
         collapsingToolbar.setTitle(mFolderName);
 
+        imageView = (ImageView) findViewById(R.id.musicFolderImageIV);
         mRecyclerView = (RecyclerView) findViewById(R.id.musicFolderRecyclerView);
         mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
 

@@ -155,7 +155,7 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Toast.makeText(mContext, mContext.getString(R.string.allSetNow), Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, mContext.getString(R.string.allSetNow), Toast.LENGTH_SHORT).show();
     }
 
 }

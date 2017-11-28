@@ -13,13 +13,13 @@
     </style>
 
     <style name="expandedAppbar" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textSize">40sp</item>
+        <item name="android:textSize">30sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="collapsedAppbar" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
