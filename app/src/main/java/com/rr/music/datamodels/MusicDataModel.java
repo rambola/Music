@@ -1,4 +1,4 @@
-package com.rr.music.utils;
+package com.rr.music.datamodels;
 
 public class MusicDataModel {
     private String songId;
@@ -8,11 +8,12 @@ public class MusicDataModel {
     private String songData;
     private String songDisplayName;
     private String folderName;
+    private String albumArtPath;
     private long songDuration;
 
     public MusicDataModel (String songId, String songAlbum, String songArtist, String songTitle,
                            String songData, String songDisplayName,
-                           String folderName, long songDuration) {
+                           String folderName, long songDuration, String albumArtPath) {
         this.songId = songId;
         this.songAlbum = songAlbum;
         this.songArtist = songArtist;
@@ -21,6 +22,7 @@ public class MusicDataModel {
         this.songDisplayName = songDisplayName;
         this.folderName =folderName;
         this.songDuration = songDuration;
+        this.albumArtPath = albumArtPath;
     }
 
     public String getSongId() {
@@ -29,6 +31,10 @@ public class MusicDataModel {
 
     public String getSongAlbum() {
         return songAlbum;
+    }
+
+    public String getAlbumArtPath() {
+        return albumArtPath;
     }
 
     public String getSongArtist() {

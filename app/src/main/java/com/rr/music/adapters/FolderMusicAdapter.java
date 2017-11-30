@@ -2,7 +2,6 @@ package com.rr.music.adapters;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,24 +46,8 @@ public class FolderMusicAdapter extends RecyclerView.Adapter<FolderMusicAdapter.
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         holder.folderNameTV.setText(mHashMapList.get(position).get(
                 Utilities.HASH_MAP_KEY_FOLDER_NAME));
-        Log.d(LOG_TAG, "HASH_MAP_KEY_SONG_ALBUM_ART_PATH: " + mHashMapList.get(position).get(
-                Utilities.HASH_MAP_KEY_SONG_ALBUM_ART_PATH)+", position: "+position);
-
-        /*MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(mHashMapList.get(position).get(
-                Utilities.HASH_MAP_KEY_SONG_DATA));
-        InputStream inputStream = null;
-        if (mmr.getEmbeddedPicture() != null) {
-            inputStream = new ByteArrayInputStream(mmr.getEmbeddedPicture());
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            Glide.with(holder.folderMusicImageIV.getContext()).load(stream.toByteArray()).asBitmap().centerCrop().
-                    transform(new GlideCircleTransform(holder.folderMusicImageIV.getContext())).
-                    diskCacheStrategy(DiskCacheStrategy.ALL).
-                    placeholder(R.mipmap.app_icon).into(holder.folderMusicImageIV);
-        }
-        mmr.release();*/
+//        Log.d(LOG_TAG, "HASH_MAP_KEY_SONG_ALBUM_ART_PATH: " + mHashMapList.get(position).get(
+//                Utilities.HASH_MAP_KEY_SONG_ALBUM_ART_PATH)+", position: "+position);
 
         Glide.with(holder.folderMusicImageIV.getContext()).load(Uri.parse(mHashMapList.get(position).get(
                 Utilities.HASH_MAP_KEY_SONG_ALBUM_ART_PATH))).centerCrop().
@@ -77,15 +60,6 @@ public class FolderMusicAdapter extends RecyclerView.Adapter<FolderMusicAdapter.
     public int getItemCount() {
         return mHashMapList.size();
     }
-
-   /* private Bitmap getBitmapFromUri(Uri uri, Context context) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                context.getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return image;
-    }*/
 
     class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView folderNameTV;

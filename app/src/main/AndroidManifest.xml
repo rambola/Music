@@ -19,20 +19,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MusicFolderListActivity"/>
+        <activity android:name=".MusicFolderListActivity" />
 
         <receiver
-            android:label="@string/app_name"
-            android:name="com.rr.music.utils.MyWidgetProvider" >
-            <intent-filter >
+            android:name=".mywidget.MyWidgetProvider"
+            android:label="@string/app_name">
+            <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.rr.music.mywidget.UPDATE_MY_WIDGET" />
+                <action android:name="com.rr.music.mywidget.UPDATE_MY_WIDGET_FROM_SERVICE" />
+                <action android:name="com.rr.music.mywidget.GREY"/>
+                <action android:name="com.rr.music.mywidget.ORANGE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
+
+        <service android:name=".background.WidgetMusicPlayerService" android:enabled="true"/>
+
+        <activity
+            android:name=".ActivityForWidget"
+            android:label="@string/app_name"/>
+
     </application>
 
 </manifest>

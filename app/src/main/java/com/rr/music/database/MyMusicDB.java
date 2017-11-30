@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.rr.music.utils.MusicDataModel;
+import com.rr.music.datamodels.MusicDataModel;
 import com.rr.music.utils.Utilities;
 
 import java.util.ArrayList;
@@ -82,18 +82,22 @@ public class MyMusicDB extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         List<MusicDataModel> list = new ArrayList<>();
 
-        String[] columns = {SONG_ID, SONG_DISPLAY_NAME, SONG_DURATION, SONG_DATA};
         String orderBy = SONG_DISPLAY_NAME + " ASC";
 
-        Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, null, null, null, null, orderBy);
+        Cursor cursor = sqLiteDatabase.query(TABLE_NAME, null, null, null, null, null, orderBy);
 
         if(null != cursor && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 list.add(new MusicDataModel(cursor.getString(
-                        cursor.getColumnIndex(SONG_ID)), "", "", "", cursor.getString(
+                        cursor.getColumnIndex(SONG_ID)), cursor.getString(
+                        cursor.getColumnIndex(SONG_ALBUM)), cursor.getString(
+                        cursor.getColumnIndex(SONG_ARTIST)), cursor.getString(
+                        cursor.getColumnIndex(SONG_TITLE)), cursor.getString(
                         cursor.getColumnIndex(SONG_DATA)), cursor.getString(
-                        cursor.getColumnIndex(SONG_DISPLAY_NAME)), "", Long.parseLong(cursor.getString(
-                        cursor.getColumnIndex(SONG_DURATION)))));
+                        cursor.getColumnIndex(SONG_DISPLAY_NAME)), cursor.getString(
+                        cursor.getColumnIndex(SONG_FOLDER_NAME)), Long.parseLong(cursor.getString(
+                        cursor.getColumnIndex(SONG_DURATION))), cursor.getString(
+                        cursor.getColumnIndex(SONG_ALBUM_ART_PATH))));
             }
         }
 
@@ -108,21 +112,25 @@ public class MyMusicDB extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         List<MusicDataModel> list = new ArrayList<>();
 
-        String[] columns = {SONG_ID, SONG_DISPLAY_NAME, SONG_DURATION, SONG_DATA};
         String orderBy = SONG_DISPLAY_NAME + " ASC";
         String selection = SONG_FOLDER_NAME + "=?";
         String selectionArgs[] = {folderName};
 
-        Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, selection, selectionArgs, null, null, orderBy);
+        Cursor cursor = sqLiteDatabase.query(TABLE_NAME, null, selection, selectionArgs, null, null, orderBy);
 
         Log.d(LOG_TAG, "getSongsAlphabeticalOrderForFolder, cursor size: "+(null != cursor ? cursor.getCount() : -1));
         if(null != cursor && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 list.add(new MusicDataModel(cursor.getString(
-                        cursor.getColumnIndex(SONG_ID)), "", "", "", cursor.getString(
+                        cursor.getColumnIndex(SONG_ID)), cursor.getString(
+                        cursor.getColumnIndex(SONG_ALBUM)), cursor.getString(
+                        cursor.getColumnIndex(SONG_ARTIST)), cursor.getString(
+                        cursor.getColumnIndex(SONG_TITLE)), cursor.getString(
                         cursor.getColumnIndex(SONG_DATA)), cursor.getString(
-                        cursor.getColumnIndex(SONG_DISPLAY_NAME)), "", Long.parseLong(cursor.getString(
-                        cursor.getColumnIndex(SONG_DURATION)))));
+                        cursor.getColumnIndex(SONG_DISPLAY_NAME)), cursor.getString(
+                        cursor.getColumnIndex(SONG_FOLDER_NAME)), Long.parseLong(cursor.getString(
+                        cursor.getColumnIndex(SONG_DURATION))), cursor.getString(
+                        cursor.getColumnIndex(SONG_ALBUM_ART_PATH))));
             }
         }
 

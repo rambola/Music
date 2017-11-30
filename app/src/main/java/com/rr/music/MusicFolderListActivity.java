@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.rr.music.adapters.MusicFolderListAdapter;
 import com.rr.music.database.MyMusicDB;
-import com.rr.music.utils.MusicDataModel;
+import com.rr.music.datamodels.MusicDataModel;
 import com.rr.music.utils.Utilities;
 
 import java.io.IOException;
@@ -130,6 +131,7 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
         super.onDestroy();
         if(null != mMediaPlayer) {
             mMediaPlayer.stop();
+            mMediaPlayer.reset();
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
@@ -184,6 +186,7 @@ public class MusicFolderListActivity extends AppCompatActivity implements MediaP
         mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
 
         mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnCompletionListener(this);
 
         mMusicDataModels = new MyMusicDB(MusicFolderListActivity.this).

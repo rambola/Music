@@ -1,5 +1,6 @@
 package com.rr.music;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,9 +19,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.rr.music.adapters.FragmentsViewPagerAdapter;
-import com.rr.music.utils.MediaMusicStoreTask;
-import com.rr.music.utils.MusicDataModel;
-import com.rr.music.utils.Utilities;
+import com.rr.music.background.MediaMusicStoreTask;
+import com.rr.music.datamodels.MusicDataModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +44,6 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
 
     private List<MusicDataModel> mMusicDataModelList = new ArrayList<>();
     private int clickedPosition = -1;
-    private boolean isOpenedFromWidget = false;
     private final String LOG_TAG = Dashboard.class.getSimpleName();
 
     @Override
@@ -125,6 +124,7 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
 
         if(null != mMediaPlayer) {
             mMediaPlayer.stop();
+            mMediaPlayer.reset();
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
@@ -137,13 +137,9 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
                 mViewPager.setCurrentItem(0);
             else {
                 super.onBackPressed();
-
-                updateTheWidget();
             }
         } else {
             super.onBackPressed();
-
-            updateTheWidget();
         }
     }
 
@@ -159,12 +155,11 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
         mContentLoadingProgressBar = (ContentLoadingProgressBar) findViewById(R.id.progressBar);
 
         mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnCompletionListener(this);
         mAppCompatSeekBar.setOnSeekBarChangeListener(this);
 
         mCardView.setVisibility(View.GONE);
-
-        isOpenedFromWidget = getIntent().getBooleanExtra(Utilities.IS_OPENED_FROM_WIDGET, false);
     }
 
     public void playMusic(List<MusicDataModel> musicDataModels, int position) {
@@ -317,15 +312,14 @@ public class Dashboard extends AppCompatActivity implements MediaPlayer.OnComple
         return currentDuration * 1000;
     }
 
-    private void updateTheWidget () {
-        /*First check the app is opened from widget or not.
-        If opened from widget then only update the widget*/
-
-//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-//        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_2x1);
-//        ComponentName thisWidget = new ComponentName(context, MyWidget.class);
-//        remoteViews.setTextViewText(R.id.my_text_view, "myText" + System.currentTimeMillis());
-//        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+    private void updateTheWidget (boolean updateTheWidget) {
+        Log.d(LOG_TAG, "updateTheWidget(), updateTheWidget: "+updateTheWidget);
+//        if(updateTheWidget) {
+//            Intent intent = new Intent();
+//            intent.setAction(Utilities.ACTION_UPDATE_MY_WIDGET);
+//            intent.putExtra(Utilities.INTENT_KEY_FOLDER_NAME, "Dummy");
+//            sendBroadcast(intent);
+//        }
     }
 
 }

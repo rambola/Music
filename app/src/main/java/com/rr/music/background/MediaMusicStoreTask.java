@@ -1,4 +1,4 @@
-package com.rr.music.utils;
+package com.rr.music.background;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -18,6 +18,7 @@ import com.rr.music.R;
 import com.rr.music.adapters.FragmentsViewPagerAdapter;
 import com.rr.music.database.MyMusicDB;
 import com.rr.music.fragments.FoldersFragment;
+import com.rr.music.utils.Utilities;
 
 public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
     private final String LOG_TAG = MediaMusicStoreTask.class.getSimpleName();
@@ -109,8 +110,6 @@ public class MediaMusicStoreTask extends AsyncTask<Void, Void, Void> {
                         cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
                 String albumArtPath = getAlbumArtPath(cursor.getString(
                         cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
-
-//                Log.d(LOG_TAG, "getAllMusicFiles(), albumArtPath: "+albumArtPath);
 
                 new MyMusicDB(mContext).insertSongDetails(cursor.getString(
                         cursor.getColumnIndex(MediaStore.Audio.Media._ID)), cursor.getString(

@@ -9,7 +9,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.rr.music.R;
-import com.rr.music.utils.MusicDataModel;
+import com.rr.music.datamodels.MusicDataModel;
 
 import java.util.ArrayList;
 import java.util.List;

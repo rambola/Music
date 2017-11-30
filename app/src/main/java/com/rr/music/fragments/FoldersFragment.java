@@ -86,7 +86,7 @@ public class FoldersFragment extends Fragment {
                 mRecyclerView.setItemAnimator(new FadeInAnimator());
                 AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mFolderMusicAdapter);
                 alphaAdapter.setFirstOnly(true);
-                alphaAdapter.setDuration(1500);
+                alphaAdapter.setDuration(1000);
                 alphaAdapter.setInterpolator(new OvershootInterpolator(2.5f));
                 mRecyclerView.setAdapter(alphaAdapter);
 

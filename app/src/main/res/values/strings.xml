@@ -13,4 +13,6 @@
     <string name="menuTop">Top</string>
     <string name="allSetNow">All set now</string>
     <string name="updatingList">Updating list</string>
+    <string name="playAll">Play All</string>
+    <string name="playFromFolder">Play From Folder</string>
 </resources>

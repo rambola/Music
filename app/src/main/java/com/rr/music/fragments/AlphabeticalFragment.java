@@ -29,7 +29,7 @@ import com.rr.music.Dashboard;
 import com.rr.music.R;
 import com.rr.music.adapters.AlphabeticMusicAdapter;
 import com.rr.music.database.MyMusicDB;
-import com.rr.music.utils.MusicDataModel;
+import com.rr.music.datamodels.MusicDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,7 @@ import jp.wasabeef.recyclerview.animators.FadeInAnimator;
 public class AlphabeticalFragment extends Fragment implements SearchView.OnQueryTextListener {
     private final String LOG_TAG = AlphabeticalFragment.class.getSimpleName();
     private List<MusicDataModel> mMusicDataModels = new ArrayList<>();
+
     private Context mContext;
     private AlphabeticMusicAdapter mAlphabeticMusicAdapter;
     private RecyclerView mRecyclerView;

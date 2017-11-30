@@ -4,56 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:layout_margin="8dip"
-    android:padding="7dip"
+    android:padding="4dip"
     android:gravity="center"
     android:background="@drawable/widget_shape" >
 
-    <!--<TextView
-        android:id="@+id/update"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal|center_vertical"
-        android:layout_margin="4dip"
-        android:text="Static Text" >
-    </TextView>-->
-
     <ImageView
-        android:id="@+id/musicCoverImg"
+        android:id="@+id/widgetMusicCoverImg"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:contentDescription="@string/app_name"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:src="@mipmap/app_icon"/>
 
     <TextView
-        android:id="@+id/songNameTV"
+        android:id="@+id/widgetSongNameTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
-        android:layout_marginEnd="7dp"
         android:layout_marginBottom="2dp"
         android:maxLines="1"
         android:ellipsize="marquee"
-        android:text="@string/app_name"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:layout_toEndOf="@+id/musicCoverImg"/>
+        android:textSize="18sp"
+        android:layout_toEndOf="@+id/widgetMusicCoverImg"/>
 
     <TextView
-        android:id="@+id/songDetailsTV"
+        android:id="@+id/widgetSongDetailsTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
-        android:layout_marginEnd="7dp"
         android:layout_marginBottom="7dp"
         android:maxLines="2"
-        android:textSize="18sp"
-        android:text="@string/app_name"
+        android:textSize="16sp"
         android:textColor="@android:color/white"
         android:ellipsize="marquee"
-        android:layout_below="@+id/songNameTV"
-        android:layout_toEndOf="@+id/musicCoverImg"/>
+        android:layout_below="@+id/widgetSongNameTV"
+        android:layout_toEndOf="@+id/widgetMusicCoverImg"/>
 
     <!--<View
         android:id="@+id/separationView"
@@ -64,11 +49,12 @@
         android:layout_marginTop="4dp"/>-->
 
     <ProgressBar
-        android:id="@+id/songProgressBar"
+        android:id="@+id/widgetSongProgressBar"
         android:layout_width="match_parent"
         android:layout_height="12dp"
-        android:layout_below="@+id/musicCoverImg"
+        android:layout_below="@+id/widgetMusicCoverImg"
         android:progress="22"
+        android:visibility="gone"
         style="?android:attr/progressBarStyleHorizontal"/>
 
     <LinearLayout
@@ -76,42 +62,47 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="7dp"
-        android:layout_below="@+id/songProgressBar">
+        android:layout_below="@+id/widgetSongProgressBar">
 
         <ImageView
-            android:id="@+id/shuffleIV"
+            android:id="@+id/widgetShuffleIV"
             android:layout_width="0dp"
             android:layout_height="31dip"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher_round"/>
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/white_shuffle"/>
 
         <ImageView
-            android:id="@+id/prevSongIV"
+            android:id="@+id/widgetPrevSongIV"
             android:layout_width="0dp"
             android:layout_height="31dip"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher_round"/>
+            android:contentDescription="@string/app_name"
+            android:src="@android:drawable/ic_media_previous"/>
 
         <ImageView
-            android:id="@+id/playPauseSongIV"
+            android:id="@+id/widgetPlayPauseSongIV"
             android:layout_width="0dp"
             android:layout_height="31dip"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher_round"/>
+            android:contentDescription="@string/app_name"
+            android:src="@android:drawable/ic_media_play"/>
 
         <ImageView
-            android:id="@+id/nextSongIV"
+            android:id="@+id/widgetNextSongIV"
             android:layout_width="0dp"
             android:layout_height="31dip"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher_round"/>
+            android:contentDescription="@string/app_name"
+            android:src="@android:drawable/ic_media_next"/>
 
         <ImageView
-            android:id="@+id/repeatSongIV"
+            android:id="@+id/widgetRepeatSongIV"
             android:layout_width="0dp"
             android:layout_height="31dip"
             android:layout_weight="1"
-            android:src="@mipmap/ic_launcher_round"/>
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/white_repeat"/>
 
     </LinearLayout>
 

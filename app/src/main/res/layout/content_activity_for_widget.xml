@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="11dp">
+
+    <RelativeLayout
+        android:id="@+id/widgetActivityOptionsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <Button
+            android:id="@+id/forWidgetPlayAllBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/playAll"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:background="@color/progressEnd"/>
+
+        <Button
+            android:id="@+id/forWidgetPlayFromFolderBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_below="@id/forWidgetPlayAllBtn"
+            android:text="@string/playFromFolder"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:background="@color/progressEnd"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/widgetActivityRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fadeScrollbars="true"
+        android:fadingEdge="vertical"
+        app:fastScrollEnabled="true"
+        android:visibility="gone"
+        app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
+        app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
+        app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
+        app:fastScrollVerticalTrackDrawable="@drawable/line_drawable"/>
+
+</RelativeLayout>

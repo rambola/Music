@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.rr.music.R;
-import com.rr.music.utils.MusicDataModel;
+import com.rr.music.datamodels.MusicDataModel;
 
 import java.util.List;
 
